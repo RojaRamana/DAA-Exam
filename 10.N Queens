@@ -1,77 +1,103 @@
 #include<stdio.h>
-#include<stdlib.h>
 #include<math.h>
-#include<stdbool.h>
-int x[100];
-char Q[100][100];
-bool place(int k,int i)
+#include<stdlib.h>
+int board[20],count;
+void print(int n)
 {
-        for(int j=0;j<=k-1;j++)
-        {
-                if(x[j]==i ||((abs(x[j]-i)==abs(j-k))))
-                {
-                        return false;
-                }
-        }
-        return true;
+ int i,j;
+ printf("\n\nSolution %d:\n\n",++count);
+ 
+ for(i=1;i<=n;++i)
+  printf("\t%d",i);
+ 
+ for(i=1;i<=n;++i)
+ {
+  printf("\n\n%d",i);
+  for(j=1;j<=n;++j) //for nxn board
+  {
+   if(board[i]==j)
+    printf("\tQ"); //queen at i,j position
+   else
+    printf("\t-"); //empty slot
+  }
+ }
 }
-void nqueens(int k,int n)
+ 
+
+int place(int row,int column)
 {
-        int w;
-        for(int i=0;i<n;i++)
-        {
-                if(place(k,i))
-                {
-                        x[k]=i;
-                        if(k==n-1)
-                        {
-
-                                for(int j=0;j<n;j++)
-                                {
-                                        w=x[j];
-                                        for(int m=0;m<n;m++)
-                                        {
-                                                if(m==w)
-                                                {
-                                                        Q[j][m]='Q';
-                                                }
-                                                else
-                                                {
-                                                        Q[j][m]='.';
-                                                }
-                                        }
-                                }
-                                for(int s=0;s<n;s++)
-                                {
-                                        for(int t=0;t<n;t++)
-                                        {
-                                                printf("%c\t",Q[s][t]);
-                                        }
-
-                                }
-                                printf("\n");
-                        }
-
-                        else
-                        {
-                                nqueens(k+1,n);
-                        }
-                }
-        }
+ int i;
+ for(i=1;i<=row-1;++i)
+ {
+  
+  if(board[i]==column)
+   return 0;
+  else
+   if(abs(board[i]-column)==abs(i-row))
+    return 0;
+ }
+ 
+ return 1; //no conflicts
 }
+ 
 
-void main()
+void queen(int row,int n)
 {
-        int n;
-        printf("enter n");
-        scanf("%d",&n);
-        nqueens(0,n);
-
+ int column;
+ for(column=1;column<=n;++column)
+ {
+  if(place(row,column))
+  {
+   board[row]=column;
+   if(row==n) 
+    print(n); 
+   else
+    queen(row+1,n);
+  }
+ }
+}
+int main()
+{
+ int n,i,j;
+ printf(" - N Queens Problem Using Backtracking -");
+ printf("\n\nEnter number of Queens:");
+ scanf("%d",&n);
+ queen(1,n);
+ return 0;
 }
 
 
 
 Output:
-enter n4
-.	Q	.	.	.	.	.	Q	Q	.	.	.	.	.	Q	.	
-.	.	Q	.	Q	.	.	.	.	.	.	Q	.	Q	.	.	
+
+
+[?2004l
+ - N Queens Problem Using Backtracking -
+
+Enter number of Queens:4
+
+
+Solution 1:
+
+	1	2	3	4
+
+1	-	Q	-	-
+
+2	-	-	-	Q
+
+3	Q	-	-	-
+
+4	-	-	Q	-
+
+Solution 2:
+
+	1	2	3	4
+
+1	-	-	Q	-
+
+2	Q	-	-	-
+
+3	-	-	-	Q
+
+4	-	Q	-	-
+
